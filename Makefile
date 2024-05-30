@@ -1,4 +1,4 @@
-obj-m += hello_driver.o
+obj-m += SSD1306_SPI.o
 KDIR = /lib/modules/$(shell uname -r)/build
 
 all:
