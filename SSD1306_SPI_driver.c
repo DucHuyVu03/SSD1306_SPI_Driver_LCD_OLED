@@ -15,6 +15,7 @@
 static DECLARE_BITMAP(minors, N_SPI_MINORS);
 static struct class *spidev_class;
 
+//Define data
 struct ssd1306_data 
 {
     dev_t devt;
@@ -31,6 +32,7 @@ struct ssd1306_data
 static LIST_HEAD(device_list);
 static DEFINE_MUTEX(device_list_lock);
 
+//Ham open
 static int ssd1306_open(struct inode *inode, struct file *filp) 
 {
     struct ssd1306_data *ssd1306;
@@ -53,6 +55,7 @@ static int ssd1306_open(struct inode *inode, struct file *filp)
     return status;
 }
 
+//Ham release
 static int ssd1306_release(struct inode *inode, struct file *filp) 
 {
     struct ssd1306_data *ssd1306 = filp->private_data;
@@ -64,6 +67,7 @@ static int ssd1306_release(struct inode *inode, struct file *filp)
     return 0;
 }
 
+//Ham write
 static ssize_t ssd1306_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos) 
 {
     struct ssd1306_data *ssd1306 = filp->private_data;
@@ -82,15 +86,16 @@ static ssize_t ssd1306_write(struct file *filp, const char __user *buf, size_t c
     return status;
 }
 
+//Cau truc operation
 static const struct file_operations ssd1306_fops = {
     .owner = THIS_MODULE,
     .open = ssd1306_open,
     .release = ssd1306_release,
     .write = ssd1306_write,
-    .read = ssd1306_read,
     .llseek = no_llseek,
 };
 
+//Ham probe
 static int ssd1306_probe(struct spi_device *spi) 
 {
     struct ssd1306_data *ssd1306;
@@ -127,6 +132,7 @@ static int ssd1306_probe(struct spi_device *spi)
     return status;
 }
 
+//Ham remove
 static int ssd1306_remove(struct spi_device *spi) 
 {
     struct ssd1306_data *ssd1306 = spi_get_drvdata(spi);
@@ -140,6 +146,7 @@ static int ssd1306_remove(struct spi_device *spi)
     return 0;
 }
 
+//
 static struct spi_driver ssd1306_driver = {
     .driver = {
         .name = "ssd1306",
