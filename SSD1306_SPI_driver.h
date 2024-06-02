@@ -3,7 +3,7 @@
 #include <linux/cdev.h>
 
 #define N_SPI_MINORS 32  // Adjust as needed
-#define SPIDEV_MAJOR 271 // Use an available major number
+#define SSD1306_MAJOR 272 // Use an available major number
 
 #define SSD1306_IOC_MAGIC 'k'
 #define SSD1306_IOC_SET_CONTRAST _IOW(SSD1306_IOC_MAGIC, 1, __u8)

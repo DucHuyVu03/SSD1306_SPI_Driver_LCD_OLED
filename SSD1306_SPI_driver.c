@@ -127,8 +127,8 @@ static int ssd1306_probe(struct spi_device *spi)
     minor = find_first_zero_bit(minors, N_SPI_MINORS);
     if (minor < N_SPI_MINORS) {
         set_bit(minor, minors);
-        ssd1306->devt = MKDEV(SPIDEV_MAJOR, minor);
-        dev = device_create(ssd1306_class, &spi->dev, ssd1306->devt, ssd1306, "spidev%d.%d", spi->master->bus_num, spi->chip_select);
+        ssd1306->devt = MKDEV(SSD1306_MAJOR, minor);
+        dev = device_create(ssd1306_class, &spi->dev, ssd1306->devt, ssd1306, "SSD1306_SPI_driver%d.%d", spi->master->bus_num, spi->chip_select);
         status = IS_ERR(dev) ? PTR_ERR(dev) : 0;
     } else {
         dev_dbg(&spi->dev, "no minor number available!\n");
@@ -168,17 +168,17 @@ static struct spi_driver ssd1306_driver = {
     .probe = ssd1306_probe,
     .remove = ssd1306_remove,
 };
-
+// ham init
 static int __init ssd1306_init(void) 
 {
     int status;
-
-    ssd1306_class = class_create(THIS_MODULE, "spidev");
+    
+    ssd1306_class = class_create(THIS_MODULE, "SSD1306_SPI_driver");
     if (IS_ERR(ssd1306_class)) {
         return PTR_ERR(ssd1306_class);
     }
 
-    status = register_chrdev(SPIDEV_MAJOR, "spidev", &ssd1306_fops);
+    status = register_chrdev(SSD1306_MAJOR, "SSD1306_SPI_driver", &ssd1306_fops);
     if (status < 0) {
         class_destroy(ssd1306_class);
         return status;
@@ -186,17 +186,17 @@ static int __init ssd1306_init(void)
 
     status = spi_register_driver(&ssd1306_driver);
     if (status < 0) {
-        unregister_chrdev(SPIDEV_MAJOR, ssd1306_driver.driver.name);
+        unregister_chrdev(SSD1306_MAJOR, ssd1306_driver.driver.name);
         class_destroy(ssd1306_class);
     }
 
     return status;
 }
-
+//ham exit
 static void __exit ssd1306_exit(void) 
 {
     spi_unregister_driver(&ssd1306_driver);
-    unregister_chrdev(SPIDEV_MAJOR, ssd1306_driver.driver.name);
+    unregister_chrdev(SSD1306_MAJOR, ssd1306_driver.driver.name);
     class_destroy(ssd1306_class);
 }
 
