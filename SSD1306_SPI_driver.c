@@ -175,7 +175,7 @@ static void ssd1306_remove(struct spi_device *spi)
 	if (ssd1306->users == 0)
 		kfree(ssd1306);
     // Free the GPIO pin
-    devm_gpio_free(&spi->dev, ssd1306->mode);
+    
 
 	mutex_unlock(&device_list_lock);
 }
