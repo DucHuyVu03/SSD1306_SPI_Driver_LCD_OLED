@@ -1,7 +1,8 @@
-// 11:26-04/06/24
+// 0:32-05/06/24
 #include <linux/spi/spi.h>
 #include <linux/mutex.h>
 #include <linux/cdev.h>
+#include <linux/types.h>
 
 #define N_SPI_MINORS 32  // Adjust as needed
 #define SSD1306_MAJOR 272 // Use an available major number

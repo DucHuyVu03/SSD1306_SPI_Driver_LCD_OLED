@@ -1,4 +1,4 @@
-// 11:26-04/06/24
+// 0:32-05/06/24
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/spi/spi.h>
@@ -10,6 +10,7 @@
 #include <linux/cdev.h>
 #include <linux/delay.h>
 #include <linux/gpio.h>
+#include <linux/types.h>
 #include <linux/mod_devicetable.h>
 
 #include "SSD1306_SPI_driver.h"
