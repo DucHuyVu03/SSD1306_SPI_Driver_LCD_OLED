@@ -110,6 +110,7 @@ static long ssd1306_ioctl(struct file *filp, unsigned int cmd, unsigned long arg
         case SSD1306_IOC_ENTIRE_DISPLAY_RESUME:
             status = ssd1306_send_command(ssd1306, 0xA4);
             break;
+//LEDs testing by blinking all LEDs 5 times
         case SSD136_IOC_BLINK_ALL_LED_TEST:
             for(int i = 0; i<5; i++)
             {
