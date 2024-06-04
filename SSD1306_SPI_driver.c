@@ -1,4 +1,4 @@
-// 23:43-03/06/24
+// 11:26-04/06/24
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/spi/spi.h>
@@ -89,11 +89,11 @@ static long ssd1306_ioctl(struct file *filp, unsigned int cmd, unsigned long arg
 
     switch (cmd) {
         case SSD1306_IOC_SET_CONTRAST:
-            // if (arg > 0xFF) return -EINVAL;
-            // mutex_lock(&ssd1306->buf_lock);
-            // // ssd1306_send_command(ssd1306, 0x81); // Set contrast command
-            // // ssd1306_send_command(ssd1306, (__u8)arg);
-            // mutex_unlock(&ssd1306->buf_lock);
+            if (arg > 0xFF) return -EINVAL;
+            mutex_lock(&ssd1306->buf_lock);
+            ssd1306_send_command(ssd1306, 0x81); // Set contrast command
+            ssd1306_send_command(ssd1306, (__u8)arg);
+            mutex_unlock(&ssd1306->buf_lock);
             break;
 //Turn ON Display
         case SSD1306_IOC_SET_DISPLAY_ON:
@@ -111,7 +111,7 @@ static long ssd1306_ioctl(struct file *filp, unsigned int cmd, unsigned long arg
             status = ssd1306_send_command(ssd1306, 0xA4);
             break;
 //LEDs testing by blinking all LEDs 5 times
-        case SSD136_IOC_BLINK_ALL_LED_TEST:
+        case SSD1306_IOC_BLINK_ALL_LED_TEST:
             for(int i = 0; i<5; i++)
             {
                 status = ssd1306_send_command(ssd1306, 0xA5);
