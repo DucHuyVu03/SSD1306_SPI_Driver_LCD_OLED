@@ -10,6 +10,7 @@
 #include <linux/cdev.h>
 #include <linux/delay.h>
 #include <linux/gpio.h>
+#include <linux/mod_devicetable.h>
 
 #include "SSD1306_SPI_driver.h"
 
@@ -78,6 +79,7 @@ static long ssd1306_ioctl(struct file *filp, unsigned int cmd, unsigned long arg
 {
     struct ssd1306_data *ssd1306;
     int status = 0;
+
 	/* Check type and command number */
 	if (_IOC_TYPE(cmd) != SSD1306_IOC_MAGIC)
 		return -ENOTTY;
@@ -93,11 +95,33 @@ static long ssd1306_ioctl(struct file *filp, unsigned int cmd, unsigned long arg
             // // ssd1306_send_command(ssd1306, (__u8)arg);
             // mutex_unlock(&ssd1306->buf_lock);
             break;
-
+//Turn ON Display
+        case SSD1306_IOC_SET_DISPLAY_ON:
+            status = ssd1306_send_command(ssd1306, 0xAF);
+            break;
+//Turn OFF Display
+        case SSD1306_IOC_SET_DISPLAY_OFF:
+            status = ssd1306_send_command(ssd1306, 0xAE);
+            break;
+//ALL LED ON
+        case SSD1306_IOC_ENTIRE_DISPLAY_ON:
+            status = ssd1306_send_command(ssd1306, 0xA5);
+            break;
+        case SSD1306_IOC_ENTIRE_DISPLAY_RESUME:
+            status = ssd1306_send_command(ssd1306, 0xA4);
+            break;
+        case SSD136_IOC_BLINK_ALL_LED_TEST:
+            for(int i = 0; i<5; i++)
+            {
+                status = ssd1306_send_command(ssd1306, 0xA5);
+                msleep(500);
+                status = ssd1306_send_command(ssd1306, 0xA4);
+                msleep(500);
+            }
+            break;
         default:
             return -ENOTTY;
     }
-
     return status;
 }
 
@@ -179,7 +203,12 @@ static void ssd1306_remove(struct spi_device *spi)
 
 	mutex_unlock(&device_list_lock);
 }
-
+//Khai bao id
+static const struct spi_device_id ssd1306_id[] = {
+    { "ssd1306", 0 },
+    { }
+};
+MODULE_DEVICE_TABLE(spi, ssd1306_id);
 //Khai bao driver
 static struct spi_driver ssd1306_driver = {
     .driver = {
@@ -188,6 +217,7 @@ static struct spi_driver ssd1306_driver = {
     },
     .probe = ssd1306_probe,
     .remove = ssd1306_remove,
+    .id_table = ssd1306_id,
 };
 
 //Ham send command

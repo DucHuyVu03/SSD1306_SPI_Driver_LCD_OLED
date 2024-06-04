@@ -6,8 +6,16 @@
 #define N_SPI_MINORS 32  // Adjust as needed
 #define SSD1306_MAJOR 272 // Use an available major number
 
+//Define ioctl conditions
 #define SSD1306_IOC_MAGIC 'k'
 #define SSD1306_IOC_SET_CONTRAST _IOW(SSD1306_IOC_MAGIC, 1, __u8)
+#define SSD1306_IOC_SET_DISPLAY_ON _IO(SSD1306_IOC_MAGIC, 2)
+#define SSD1306_IOC_SET_DISPLAY_OFF _IO(SSD1306_IOC_MAGIC, 3)
+#define SSD1306_IOC_ENTIRE_DISPLAY_ON _IO(SSD1306_IOC_MAGIC, 4)
+#define SSD1306_IOC_ENTIRE_DISPLAY_RESUME _IO(SSD1306_IOC_MAGIC, 5) //Turn off all LEDs that are not stored in RAM 
+#define SSD136_IOC_BLINK_ALL_LED_TEST _IO(SSD1306_IOC_MAGIC, 6) //Turn ON and OFF all LEDs 5 times for display function testing 
+
+//Other marcos
 #define SSD1306_IOC_MAXNR 1
 
 #define SSD1306_DC 23
