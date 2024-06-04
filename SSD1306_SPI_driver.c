@@ -120,6 +120,9 @@ static long ssd1306_ioctl(struct file *filp, unsigned int cmd, unsigned long arg
                 msleep(500);
             }
             break;
+        case SSD1306_IOC_DISPLAY_INIT:
+            ssd1306_recommend_init(ssd1306);
+            break;
         default:
             return -ENOTTY;
     }
@@ -274,6 +277,48 @@ static int ssd1306_send_data(struct ssd1306_data *ssd1306, const u8 *data, size_
 
     return ret;
 }
+static void ssd1306_recommend_init(struct ssd1306_data *ssd1306)
+{
+    ssd1306_send_command(ssd1306, 0xAE); //Display OFF
+    ssd1306_send_command(ssd1306, 0xD5); //Set Display Clock Divide Ratio and Oscillator Frequency
+    ssd1306_send_command(ssd1306, 0x80); //Default setting for Display Clock Divide Ratio and Oscillator Frequency
+    ssd1306_send_command(ssd1306, 0xA8); //Set multiplex ratio
+    ssd1306_send_command(ssd1306, 0x3F); //64 COM lines
+    ssd1306_send_command(ssd1306, 0xD3); //Set Display offset
+    ssd1306_send_command(ssd1306, 0x00); //No offset
+    ssd1306_send_command(ssd1306, 0x40); //Set first line as start line
+    ssd1306_send_command(ssd1306, 0x8D); //Set charge bump 
+    ssd1306_send_command(ssd1306, 0x14); //Enable charge bump during display on
+    ssd1306_send_command(ssd1306, 0x20); //Set memory address mode
+    ssd1306_send_command(ssd1306, 0x00); //Set Horizontal Address mode
+    ssd1306_send_command(ssd1306, 0xA0); //Set segment remap with column address start from left to right 
+    ssd1306_send_command(ssd1306, 0xC0); //Set com output scan direction, scan from left to right 
+    ssd1306_send_command(ssd1306, 0xDA); //Set com pins hardware configuration
+    ssd1306_send_command(ssd1306, 0x12); //Alternative com pin configuration, disable com left/right remap
+    ssd1306_send_command(ssd1306, 0x81); //Set contrast control
+    ssd1306_send_command(ssd1306, 0x80); //Set Contrast to 128
+    ssd1306_send_command(ssd1306, 0xD9); //Set pre-charge period
+    ssd1306_send_command(ssd1306, 0xF1); //Phase 1 period of 15 DCLK, Phase 2 period of 1 DCLK
+    ssd1306_send_command(ssd1306, 0xDB); //Set Vcomh deselect level
+    ssd1306_send_command(ssd1306, 0x20); //Vcomh deselect level ~ 0.77 Vcc
+    ssd1306_send_command(ssd1306, 0xA4); //Entire display ON, resume to RAM content display
+    ssd1306_send_command(ssd1306, 0xA6); //Set Display in Normal Mode, 1 = ON, 0 = OFF
+    ssd1306_send_command(ssd1306, 0x2E); //Deactivate scroll
+    ssd1306_send_command(ssd1306, 0xAF); //Display ON in normal mode
+}
+
+// static void ssd1306_set_pixel(struct ssd1306_data *ssd1306,int x, int y)
+// {
+//     if(x < 0 || x >= SSD1306_WIDTH || y < 0 || y >= SSD1306_HEIGHT)
+//     {
+//         return ENOMEM; 
+//     }
+//     else
+//     {
+//         int page = y / 8;
+//         int 
+//     }
+// }
 
 // ham init
 static int __init ssd1306_init(void) 

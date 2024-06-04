@@ -14,12 +14,16 @@
 #define SSD1306_IOC_ENTIRE_DISPLAY_ON _IO(SSD1306_IOC_MAGIC, 4)
 #define SSD1306_IOC_ENTIRE_DISPLAY_RESUME _IO(SSD1306_IOC_MAGIC, 5) //Turn off all LEDs that are not stored in RAM 
 #define SSD1306_IOC_BLINK_ALL_LED_TEST _IO(SSD1306_IOC_MAGIC, 6) //Turn ON and OFF all LEDs 5 times for display function testing 
+#define SSD1306_IOC_DISPLAY_INIT _IO(SSD1306_IOC_MAGIC, 7) //Initiate Display with recommended setting 
 
 //Other marcos
 #define SSD1306_IOC_MAXNR 1
+#define SSD1306_HEIGHT 128
+#define SSD1306_WIDTH 64
 
 //Define physical pins
 #define SSD1306_DC 23
+
 
 //Define data
 struct ssd1306_data 
